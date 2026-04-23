@@ -80,15 +80,15 @@ export default function Mission() {
               ))}
             </div>
 
-            <motion.a
-              href="#contact"
+            <motion.button
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center gap-2 mt-8 px-6 py-3 bg-[#2ccb99] text-[#01100c] rounded-lg font-semibold hover:bg-[#25b389] transition-colors"
+              className="inline-flex items-center gap-2 mt-8 px-6 py-3 bg-[#2ccb99] text-[#01100c] rounded-lg font-semibold hover:bg-[#25b389] transition-colors cursor-pointer"
             >
               Start Your Journey
               <ArrowRight className="w-4 h-4" />
-            </motion.a>
+            </motion.button>
           </motion.div>
 
           <motion.div

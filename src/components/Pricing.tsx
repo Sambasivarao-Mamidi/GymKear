@@ -1,79 +1,183 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Check, Star } from "lucide-react";
+import GlareHover from "./GlareHover";
 
 const plans = [
   {
-    name: "Basic Plan",
-    price: "$20",
-    period: "month",
-    features: ["Staffed Hours Only", "Fitness Floor & Cardio", "30-Minute Consultation", "Club 360 Class", "50% Off on Guest Passes"],
+    name: "Monthly",
+    duration: "1 Month",
+    price: 49,
+    perMonth: 49,
+    total: "$49",
+    planId: "monthly",
+    popular: false,
+    features: [
+      { text: "Full Gym Access", included: true },
+      { text: "Cardio Zone", included: true },
+      { text: "Locker Room", included: true },
+      { text: "Group Classes", included: false },
+      { text: "Personal Training", included: false },
+    ],
+    cta: "Join Now",
   },
   {
-    name: "Standard Plan",
-    price: "$35.99",
-    period: "month",
-    features: ["Access to All CLUB4 Locations", "Fitness Floor & Cardio", "Studio Fitness & Les Mills Classes", "Tanning/Red-Light Therapy", "Guest Passes & Bottled Water", "30-Minute Fitness Consultation"],
+    name: "Quarterly",
+    duration: "3 Months",
+    price: 117,
+    perMonth: 39,
+    total: "$117",
+    planId: "quarterly",
+    popular: true,
+    features: [
+      { text: "Full Gym Access", included: true },
+      { text: "Cardio Zone", included: true },
+      { text: "Locker Room", included: true },
+      { text: "Group Classes", included: true },
+      { text: "Personal Training", included: false },
+    ],
+    cta: "Join Now",
   },
   {
-    name: "Premium Plan",
-    price: "$45.99",
-    period: "month",
-    features: ["Access to All CLUB4 Locations", "Fitness Floor & Cardio", "Studio Fitness & Les Mills Classes", "Tanning/Red-Light Therapy", "Hydro Massage", "Guest Passes & Bottled Water", "Unlimited CLUB360 Classes"],
+    name: "Yearly",
+    duration: "1 Year",
+    price: 348,
+    perMonth: 29,
+    total: "$348",
+    planId: "yearly",
+    popular: false,
+    features: [
+      { text: "Full Gym Access", included: true },
+      { text: "Cardio Zone", included: true },
+      { text: "Premium Locker Room", included: true },
+      { text: "Unlimited Group Classes", included: true },
+      { text: "Personal Training", included: true },
+    ],
+    cta: "Join Now",
   },
 ];
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="d2c_gradient_lb py-20 lg:py-28">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="pricing" className="d2c_gradient_lb py-20 lg:py-28 relative overflow-hidden">
+      <div className="absolute top-10 left-1/4 w-64 h-64 bg-[#2ccb99]/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-[#2ccb99]/5 rounded-full blur-3xl" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center w-full md:w-11/12 lg:w-4/5 xl:w-3/5 mx-auto mb-10"
+          className="text-center mb-12"
         >
-          <h2 className="d2c_title mb-4" style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}>
-            Choose Your <br />
-            <span className="text-outline" data-text="Pricing">Pricing</span>
+          <h2 
+            className="d2c_title text-4xl md:text-5xl lg:text-6xl" 
+            style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}
+          >
+            Choose Your <span className="text-[#2ccb99]">Plan</span>
           </h2>
-          <p className="text-white/90 text-base xl:text-xl w-full md:w-4/5 xl:w-3/4 mx-auto" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>
-            Join the GymKear family by choosing the membership plan that best suits your lifestyle and goals
+          <p 
+            className="mt-4 text-white/70 text-base md:text-lg max-w-xl mx-auto" 
+            style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
+          >
+            Flexible plans for every fitness journey. Save more with longer commitments.
           </p>
         </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-6 lg:gap-8 mt-6 lg:mt-10">
+        <div className="flex flex-wrap justify-center items-stretch gap-6 lg:gap-8 mt-10">
           {plans.map((plan, index) => (
             <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 24 }}
+              key={plan.name}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-22px)] p-3"
+              transition={{ duration: 0.5, delay: index * 0.15 }}
+              className={`relative w-full max-w-sm ${plan.popular ? 'lg:scale-105 lg:z-10' : ''}`}
             >
-              <div className="d2c_card_bg rounded-lg p-6 xl:p-10 h-full flex flex-col justify-between group hover:border-[#2ccb99]/50 transition-colors">
-                <div>
-                  <p className="text-xl text-white mb-2" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>{plan.name}</p>
-                  <h4 className="text-[#2ccb99] lowercase flex items-baseline gap-1 mb-4">
-                    <span className="text-5xl xl:text-7xl" style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}>{plan.price}/</span>
-                    <label className="text-xl" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>{plan.period}</label>
-                  </h4>
-                  <ul className="space-y-2 mt-4">
-                    {plan.features.map((f, i) => (
-                      <li key={i} className="text-white text-base xl:text-xl" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
+              {plan.popular && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30">
+                  <span className="flex items-center gap-1 px-4 py-1.5 bg-[#2ccb99] text-[#01100c] text-sm font-bold rounded-full">
+                    <Star className="w-4 h-4 fill-current" />
+                    Best Value
+                  </span>
                 </div>
-                <a
-                  href="#contact"
-                  className="d2c_btn d2c_btn_secondary mt-8 text-center cursor-pointer group-hover:!bg-[#2ccb99] group-hover:!text-[#01100c]"
-                >
-                  Get Membership Now
-                </a>
-              </div>
+              )}
+
+              <GlareHover 
+                glareColor="#2ccb99" 
+                glareOpacity={0.15}
+                className={`h-full rounded-2xl ${
+                  plan.popular 
+                    ? 'bg-gradient-to-b from-[#1d2b28] to-[#0d1812] border-2 border-[#2ccb99] shadow-lg shadow-[#2ccb99]/10' 
+                    : 'bg-gradient-to-b from-[#1d2b28]/80 to-[#0d1812]/80 border border-[#2e3937]/30'
+                }`}
+              >
+                <div className="p-6 lg:p-8 flex flex-col h-full">
+                  <div className="text-center mb-2">
+                    <div className="inline-block px-4 py-1 rounded-full bg-[#2ccb99]/10 text-[#2ccb99] text-sm font-semibold mb-3">
+                      {plan.duration}
+                    </div>
+                    <h3 
+                      className="text-2xl font-bold text-white" 
+                      style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}
+                    >
+                      {plan.name}
+                    </h3>
+                  </div>
+
+                  <div className="text-center mb-6">
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="text-[#2ccb99] text-3xl font-bold">$</span>
+                      <span 
+                        className="text-5xl lg:text-6xl font-bold text-white" 
+                        style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}
+                      >
+                        {plan.perMonth}
+                      </span>
+                      <span className="text-white/50 text-lg">/mo</span>
+                    </div>
+                    <p className="text-white/40 text-sm mt-1">
+                      {plan.total} billed {plan.duration === "1 Month" ? "today" : `every ${plan.duration.toLowerCase()}`}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3 mb-8 flex-1">
+                    {plan.features.map((feature, i) => (
+                      <div 
+                        key={i} 
+                        className={`flex items-center gap-3 ${feature.included ? 'text-white' : 'text-white/30'}`}
+                      >
+                        {feature.included ? (
+                          <Check className="w-5 h-5 text-[#2ccb99] shrink-0" />
+                        ) : (
+                          <div className="w-5 h-5 flex items-center justify-center">
+                            <div className="w-3 h-0.5 bg-white/30" />
+                          </div>
+                        )}
+                        <span className="text-sm">{feature.text}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <motion.a
+                    href={`#contact?plan=${plan.planId}`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`w-full py-3.5 text-center font-bold rounded-xl transition-all ${
+                      plan.popular
+                        ? "bg-[#2ccb99] text-[#01100c] hover:bg-[#25b389]"
+                        : "bg-transparent border-2 border-[#2ccb99] text-[#2ccb99] hover:bg-[#2ccb99] hover:text-[#01100c]"
+                    }`}
+                  >
+                    {plan.cta}
+                  </motion.a>
+                </div>
+              </GlareHover>
+
+              {plan.popular && (
+                <div className="absolute inset-0 -z-10 bg-[#2ccb99]/20 blur-3xl rounded-2xl" />
+              )}
             </motion.div>
           ))}
         </div>

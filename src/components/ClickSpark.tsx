@@ -10,11 +10,11 @@ const ClickSpark = ({
   duration = 400,
   easing = 'ease-out',
   extraScale = 1.0,
-  children
+  children = null
 }) => {
-  const canvasRef = useRef(null);
-  const sparksRef = useRef([]);
-  const startTimeRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const sparksRef = useRef<Array<{x: number; y: number; angle: number; startTime: number}>>([]);
+  const startTimeRef = useRef<number | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const ClickSpark = ({
     
     const canvas = canvasRef.current;
     if (!canvas) return;
-
+    
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -40,7 +40,7 @@ const ClickSpark = ({
   }, [mounted]);
 
   const easeFunc = useCallback(
-    t => {
+    (t: number) => {
       switch (easing) {
         case 'linear':
           return t;
@@ -57,14 +57,15 @@ const ClickSpark = ({
 
   useEffect(() => {
     if (!mounted) return;
-    
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    let animationId;
+    let animationId: number;
 
-    const draw = timestamp => {
+    const draw = (timestamp: number) => {
       if (!startTimeRef.current) {
         startTimeRef.current = timestamp;
       }
@@ -107,43 +108,46 @@ const ClickSpark = ({
     };
   }, [sparkColor, sparkSize, sparkRadius, sparkCount, duration, easeFunc, extraScale, mounted]);
 
-  const handleClick = e => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const x = e.clientX;
-    const y = e.clientY;
+  useEffect(() => {
+    if (!mounted) return;
 
-    const now = performance.now();
-    const newSparks = Array.from({ length: sparkCount }, (_, i) => ({
-      x,
-      y,
-      angle: (2 * Math.PI * i) / sparkCount,
-      startTime: now
-    }));
+    const handleClick = (e: MouseEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      const x = e.clientX;
+      const y = e.clientY;
 
-    sparksRef.current.push(...newSparks);
-  };
+      const now = performance.now();
+      const newSparks = Array.from({ length: sparkCount }, (_, i) => ({
+        x,
+        y,
+        angle: (2 * Math.PI * i) / sparkCount,
+        startTime: now
+      }));
+
+      sparksRef.current.push(...newSparks);
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [sparkCount, mounted]);
 
   if (!mounted) return <>{children}</>;
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 9999,
-        pointerEvents: 'auto'
-      }}
-      onClick={handleClick}
-    >
+    <>
+      {children}
       <canvas
         ref={canvasRef}
         style={{
-          display: 'block',
-          userSelect: 'none'
+          position: 'fixed',
+          inset: 0,
+          pointerEvents: 'none',
+          zIndex: 9999,
         }}
       />
-    </div>
+    </>
   );
 };
 

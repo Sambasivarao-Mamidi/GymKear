@@ -21,30 +21,33 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navItems.map((item) => item.href.slice(1));
+      const scrollPosition = window.scrollY + 100;
       
-      for (const section of sections.reverse()) {
-        const element = document.getElementById(section);
+      for (const item of navItems) {
+        const sectionId = item.href.slice(1);
+        const element = document.getElementById(sectionId);
         if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 150) {
-            setActiveSection(section);
+          const offsetTop = element.offsetTop;
+          const offsetHeight = element.offsetHeight;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(sectionId);
             break;
           }
         }
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
     setIsOpen(false);
-    const targetId = href.slice(1);
+    const targetId = href.replace("#", "");
     const element = document.getElementById(targetId);
     if (element) {
-      e.preventDefault();
       const offset = 80;
       const top = element.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: "smooth" });
@@ -79,7 +82,7 @@ export default function Navbar() {
                   className={`nav-link-name whitespace-nowrap shrink-0 relative ${
                     activeSection === item.href.slice(1)
                       ? "text-[#2ccb99]"
-                      : "text-white"
+                      : "text-white hover:text-[#2ccb99]"
                   }`}
                 >
                   {item.name}

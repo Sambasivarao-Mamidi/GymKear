@@ -17,34 +17,54 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="d2c_gradient_lb py-20 lg:py-28">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="faq" className="d2c_gradient_lb py-20 lg:py-28 relative">
+      <div className="absolute top-20 right-0 w-64 h-64 bg-[#2ccb99]/5 rounded-full blur-3xl" />
+      
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center w-full md:w-11/12 lg:w-4/5 xl:w-3/5 mx-auto mb-10"
+          className="text-center mb-12"
         >
-          <h2 className="d2c_title mb-4" style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}>
-            Frequently Asked <br />
-            <span className="text-outline" data-text="Questions">Questions</span>
+          <h2 
+            className="d2c_title text-4xl md:text-5xl lg:text-6xl" 
+            style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}
+          >
+            Frequently <span className="text-[#2ccb99]">Asked</span>
           </h2>
-          <p className="text-white/90 text-base xl:text-xl w-full md:w-4/5 xl:w-3/4 mx-auto" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>
-            We provide clear and concise answers to help users understand more about the gym's services, policies.
+          <p 
+            className="mt-4 text-white/70 text-base md:text-lg max-w-xl mx-auto" 
+            style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
+          >
+            We provide clear and concise answers to help you understand more about GymKear.
           </p>
         </motion.div>
 
-        <div className="border border-[#2e3937] rounded-lg p-5 md:py-14 md:px-20 mt-6 md:mt-10">
+        <div className="space-y-3 mt-8">
           {faqs.map((faq, index) => (
-            <div key={index} className="border-b border-[#2e3937] last:border-b-0">
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.05 }}
+              className={`rounded-xl border transition-all duration-300 ${
+                openIndex === index 
+                  ? "bg-gradient-to-b from-[#1d2b28] to-[#0d1812] border-[#2ccb99]/50" 
+                  : "bg-[#1d2b28]/50 border-[#2e3937]/30 hover:border-[#2ccb99]/30"
+              }`}
+            >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="accordion-header w-full flex items-center gap-4 py-4 text-left cursor-pointer"
+                className="w-full flex items-center gap-4 p-5 md:p-6 text-left"
               >
-                <span className="text-[#2ccb99] flex-shrink-0">
-                  {openIndex === index ? <Minus className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
+                <span className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                  openIndex === index ? "bg-[#2ccb99] text-[#01100c]" : "bg-[#2e3937]/50 text-[#2ccb99]"
+                }`}>
+                  {openIndex === index ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </span>
-                <h4 className="text-[#2ccb99] text-xl md:text-2xl xl:text-3xl uppercase font-normal" style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}>
+                <h4 className="text-white text-base md:text-lg font-medium flex-1" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>
                   {faq.question}
                 </h4>
               </button>
@@ -57,13 +77,13 @@ export default function FAQ() {
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
-                    <p className="text-white/90 py-4 text-base xl:text-lg md:pl-16" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>
+                    <p className="text-white/70 pb-5 px-5 md:pl-16 md:pr-6 text-sm md:text-base" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>
                       {faq.answer}
                     </p>
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

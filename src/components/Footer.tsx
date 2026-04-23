@@ -37,7 +37,7 @@ export default function Footer() {
             Subscribe to Our <br />
             <span className="text-outline" data-text="Newsletter">Newsletter</span>
           </h2>
-          <p className="text-white/90 w-full md:w-4/5 xl:w-3/4 mx-auto text-base xl:text-xl mb-8" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>
+          <p className="text-white/90 w-full md:w-4/5 xl:w-3/4 mx-auto text-base xl:text-xl mb-8 leading-relaxed" style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}>
             Stay updated with the latest news, events, and promotions from GymKear by subscribing to our newsletter.
           </p>
           <form onSubmit={handleNewsletter} className="flex flex-col md:flex-row items-center max-w-2xl mx-auto gap-4 mt-8">

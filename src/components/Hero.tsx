@@ -156,16 +156,30 @@ export default function Hero() {
               Get Fit, Strong and
             </h2>
             <p
-              className="mt-4 text-white/90 text-base xl:text-xl max-w-xl mx-auto lg:mx-0"
+              className="mt-4 text-white/90 text-base xl:text-xl max-w-xl mx-auto lg:mx-0 leading-relaxed"
               style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
             >
               Welcome to GymKear, where your fitness transformation begins. Featuring a high-energy background image of individuals pushing their limits.
             </p>
             <div className="flex justify-center lg:justify-start items-center gap-6 mt-6 md:mt-8 lg:mt-10">
-              <a href="#contact" className="d2c_btn d2c_btn_primary w-full md:w-auto text-center">
+              <a 
+                href="#pricing" 
+                className="d2c_btn d2c_btn_primary w-full md:w-auto text-center"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 Join Now
               </a>
-              <a href="#about" className="d2c_btn d2c_btn_secondary w-full md:w-auto text-center">
+              <a 
+                href="#contact" 
+                className="d2c_btn d2c_btn_secondary w-full md:w-auto text-center"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 Get Started
               </a>
             </div>
