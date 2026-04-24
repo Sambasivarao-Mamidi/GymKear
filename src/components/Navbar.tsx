@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { useMobileDetection } from "./MagicBento";
 import CardNav from "./CardNav";
+
+const MOBILE_BREAKPOINT = 768;
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -20,7 +21,16 @@ const navItems = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const isMobile = useMobileDetection();
+  // null = not yet determined (SSR/hydration), true/false = client-side resolved
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  // Detect mobile immediately on mount — before first paint if possible
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,7 +55,16 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Render CardNav on mobile, current navbar on desktop
+  // Don't render anything until we know if it's mobile or desktop
+  // This prevents the flash of wrong navbar
+  if (isMobile === null) {
+    // Render a minimal placeholder with the same height to prevent layout shift
+    return (
+      <header className="sticky top-0 w-full z-50" style={{ height: 60 }} />
+    );
+  }
+
+  // Render CardNav on mobile
   if (isMobile) {
     return <CardNav />;
   }

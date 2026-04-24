@@ -99,30 +99,11 @@ const CardNav = () => {
     const tl = createTimeline();
     tlRef.current = tl;
 
-    // Pause GSAP animations on touch interaction
-    const pauseOnTouch = () => {
-      if (tlRef.current && !tlRef.current.paused()) {
-        tlRef.current.pause();
-      }
-    };
-
-    const resumeAfterTouch = () => {
-      if (tlRef.current && isExpanded) {
-        tlRef.current.resume();
-      }
-    };
-
-    // Add touch event listeners for mobile pause behavior
-    document.addEventListener("touchstart", pauseOnTouch, { passive: true });
-    document.addEventListener("touchend", resumeAfterTouch, { passive: true });
-
     return () => {
       tl?.kill();
       tlRef.current = null;
-      document.removeEventListener("touchstart", pauseOnTouch);
-      document.removeEventListener("touchend", resumeAfterTouch);
     };
-  }, [isExpanded]);
+  }, []);
 
   useLayoutEffect(() => {
     const handleResize = () => {
