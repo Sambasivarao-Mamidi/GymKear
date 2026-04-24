@@ -141,7 +141,8 @@ export function MagicBentoCard({
   }, [initializeParticles]);
 
   useEffect(() => {
-    if (disableAnimations || !cardRef.current) return;
+    // On mobile, skip mouse event listeners entirely — no hover on touch devices
+    if (disableAnimations || !cardRef.current || isMobile) return;
 
     const element = cardRef.current;
 
@@ -275,70 +276,18 @@ export function MagicBentoCard({
     };
   }, [animateParticles, clearAllParticles, disableAnimations, enableTilt, enableMagnetism, clickEffect, glowColor]);
 
-  // Mobile auto-animation effect
+  // Mobile: apply lightweight CSS-only effects instead of JS animations
   useEffect(() => {
     if (disableAnimations || !cardRef.current || !isMobile) return;
 
     const element = cardRef.current;
+    // Use CSS will-change hint for the CSS auto-tilt animation only
     element.style.willChange = "transform";
-
-    // Auto-oscillating tilt effect for mobile
-    if (enableTilt) {
-      gsap.to(element, {
-        rotateX: 2,
-        rotateY: -2,
-        duration: 2,
-        ease: "sine.inOut",
-        repeat: -1,
-        yoyo: true,
-        transformPerspective: 1000,
-      });
-    }
-
-    // Auto-spawn particles on mount (reduced count for mobile performance)
-    const mobileParticleCount = Math.floor(particleCount / 2);
-    const rect = element.getBoundingClientRect();
-    const mobileParticles = Array.from({ length: mobileParticleCount }, (_, i) => {
-      const particle = createParticleElement(
-        Math.random() * rect.width,
-        Math.random() * rect.height,
-        glowColor
-      );
-      particle.style.opacity = "0";
-      element.appendChild(particle);
-      particlesRef.current.push(particle);
-
-      // Animate particle appearance
-      gsap.to(particle, {
-        opacity: 1,
-        duration: 0.5,
-        delay: i * 0.3,
-        ease: "power2.out",
-      });
-
-      // Floating animation
-      gsap.to(particle, {
-        x: (Math.random() - 0.5) * 60,
-        y: (Math.random() - 0.5) * 60,
-        duration: 2 + Math.random(),
-        ease: "sine.inOut",
-        repeat: -1,
-        yoyo: true,
-      });
-
-      return particle;
-    });
 
     return () => {
       element.style.willChange = "auto";
-      gsap.killTweensOf(element);
-      particlesRef.current.forEach((p) => {
-        gsap.killTweensOf(p);
-        p.remove();
-      });
-      particlesRef.current = [];
     };
-  }, [disableAnimations, isMobile, enableTilt, particleCount, glowColor]);
+  }, [disableAnimations, isMobile]);
 
   const baseClassName = `${className} magic-bento-card ${enableBorderGlow ? "magic-bento-card--border-glow" : ""} ${isMobile && enableTilt ? "auto-tilt" : ""}`;
 

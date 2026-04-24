@@ -49,6 +49,8 @@ interface LightRaysProps {
   className?: string;
 }
 
+const isMobileDevice = () => typeof window !== 'undefined' && window.innerWidth <= 768;
+
 const LightRays = ({
   raysOrigin = "top-center",
   raysColor = DEFAULT_COLOR,
@@ -111,8 +113,9 @@ const LightRays = ({
 
       if (!containerRef.current) return;
 
+      const mobile = isMobileDevice();
       const renderer = new Renderer({
-        dpr: Math.min(window.devicePixelRatio, 2),
+        dpr: mobile ? 1 : Math.min(window.devicePixelRatio, 2),
         alpha: true,
       });
       rendererRef.current = renderer;
@@ -264,7 +267,7 @@ const LightRays = ({
       const updatePlacement = () => {
         if (!containerRef.current || !renderer) return;
 
-        renderer.dpr = Math.min(window.devicePixelRatio, 2);
+        renderer.dpr = mobile ? 1 : Math.min(window.devicePixelRatio, 2);
 
         const { clientWidth: wCSS, clientHeight: hCSS } = containerRef.current;
         renderer.setSize(wCSS, hCSS);
@@ -280,14 +283,25 @@ const LightRays = ({
         uniforms.rayDir.value = dir;
       };
 
+      // On mobile, throttle rendering to ~30fps to save battery and reduce jank
+      let lastRenderTime = 0;
+      const minFrameInterval = mobile ? 33 : 0; // ~30fps on mobile, uncapped on desktop
+
       const loop = (t: number) => {
         if (!rendererRef.current || !uniformsRef.current || !meshRef.current) {
           return;
         }
 
+        // Throttle frame rate on mobile
+        if (minFrameInterval > 0 && t - lastRenderTime < minFrameInterval) {
+          animationIdRef.current = requestAnimationFrame(loop);
+          return;
+        }
+        lastRenderTime = t;
+
         uniforms.iTime.value = t * 0.001;
 
-        if (followMouse && mouseInfluence > 0.0) {
+        if (!mobile && followMouse && mouseInfluence > 0.0) {
           const smoothing = 0.92;
 
           smoothMouseRef.current.x = smoothMouseRef.current.x * smoothing + mouseRef.current.x * (1 - smoothing);
@@ -400,6 +414,9 @@ const LightRays = ({
   ]);
 
   useEffect(() => {
+    // Skip mouse tracking on mobile — there's no hover cursor
+    if (isMobileDevice()) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current || !rendererRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
@@ -409,7 +426,7 @@ const LightRays = ({
     };
 
     if (followMouse) {
-      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
       return () => window.removeEventListener("mousemove", handleMouseMove);
     }
   }, [followMouse]);

@@ -67,6 +67,15 @@ p {
   }
 }
 
+/* Testimonials scroll - pure CSS, GPU composited */
+@keyframes testimonial-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.testimonial-scroll {
+  animation: testimonial-scroll 25s linear infinite;
+}
+
 /* Improve heading readability */
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
@@ -379,12 +388,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Mobile Auto-Animations (running without hover) */
 @media (max-width: 767px) {
-  /* Auto-scale pulse for Gallery/Trainers cards */
-  .auto-scale-pulse {
-    animation: auto-scale-pulse 3s ease-in-out infinite;
-  }
-  
-  /* Auto-border pulse for Features/Mission cards */
+  /* Auto-border pulse for Features/Mission cards - lightweight */
   .auto-border-pulse {
     animation: auto-border-pulse 2s ease-in-out infinite;
   }
@@ -411,20 +415,22 @@ h1, h2, h3, h4, h5, h6 {
     transform: scaleX(1) !important;
   }
   
-  /* Auto-scale for MagicBentoCard */
+  /* Disable expensive JS-driven tilt on mobile, use lightweight CSS only */
   .auto-tilt {
-    animation: auto-tilt 4s ease-in-out infinite;
+    animation: auto-tilt 6s ease-in-out infinite;
   }
   
-  /* Auto-particle spawn */
-  .auto-particles {
-    opacity: 1 !important;
+  /* Disable glare sweep animation on mobile - saves GPU compositing */
+  .glare-auto::before,
+  .glare-hover::before {
+    animation: none !important;
+    background-position: 100% 100% !important;
   }
-}
 
-@keyframes auto-scale-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.03); }
+  /* Testimonials: slower on mobile for smoother feel */
+  .testimonial-scroll {
+    animation-duration: 30s;
+  }
 }
 
 @keyframes auto-border-pulse {
@@ -434,8 +440,5 @@ h1, h2, h3, h4, h5, h6 {
 
 @keyframes auto-tilt {
   0%, 100% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg); }
-  25% { transform: perspective(1000px) rotateX(2deg) rotateY(-2deg); }
-  50% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg); }
-  75% { transform: perspective(1000px) rotateX(-2deg) rotateY(2deg); }
-  100% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg); }
+  50% { transform: perspective(1000px) rotateX(1deg) rotateY(-1deg); }
 }

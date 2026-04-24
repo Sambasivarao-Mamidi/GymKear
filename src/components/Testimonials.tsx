@@ -83,9 +83,8 @@ function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] 
 }
 
 export default function Testimonials() {
+  // Only duplicate twice for the CSS marquee loop (down from 4x)
   const extendedTestimonials = [
-    ...testimonials,
-    ...testimonials,
     ...testimonials,
     ...testimonials,
   ];
@@ -121,21 +120,15 @@ export default function Testimonials() {
           <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-[#01100c] to-transparent z-10 pointer-events-none" />
           
           <div className="overflow-hidden">
-            <motion.div
-              className="flex gap-6"
-              animate={{
-                x: ["0%", "-25%"]
-              }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                ease: "linear"
-              }}
+            {/* Pure CSS animation instead of framer-motion for much better performance */}
+            <div
+              className="flex gap-6 testimonial-scroll"
+              style={{ willChange: "transform" }}
             >
               {extendedTestimonials.map((testimonial, i) => (
                 <TestimonialCard key={i} testimonial={testimonial} />
               ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
