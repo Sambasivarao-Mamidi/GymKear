@@ -67,30 +67,14 @@ p {
   }
 }
 
-/* Testimonials scroll - pure CSS, GPU composited */
-@keyframes testimonial-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.testimonial-scroll {
-  animation: testimonial-scroll 5s linear infinite;
-}
-.testimonial-scroll:hover,
-.testimonial-scroll:active,
-.testimonial-scroll.paused,
-.testimonial-scroll.dragging {
-  animation-play-state: paused;
-}
-.testimonial-scroll.dragging * {
-  pointer-events: none;
-  user-select: none;
-}
-.testimonial-wrapper {
-  overflow-x: auto;
+/* Testimonials - native scroll for smooth touch swiping */
+.testimonial-container {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: auto;
 }
-.testimonial-wrapper::-webkit-scrollbar {
+.testimonial-container::-webkit-scrollbar {
   display: none;
 }
 
