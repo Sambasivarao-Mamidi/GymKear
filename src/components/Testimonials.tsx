@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
@@ -83,11 +84,20 @@ function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] 
 }
 
 export default function Testimonials() {
-  // Only duplicate twice for the CSS marquee loop (down from 4x)
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const extendedTestimonials = [
     ...testimonials,
     ...testimonials,
   ];
+
+  const handleTouchStart = () => {
+    scrollRef.current?.classList.add("paused");
+  };
+
+  const handleTouchEnd = () => {
+    scrollRef.current?.classList.remove("paused");
+  };
 
   return (
     <section id="testimonials" className="py-20 lg:py-28 relative overflow-hidden" aria-label="Testimonials">
@@ -120,10 +130,12 @@ export default function Testimonials() {
           <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-[#01100c] to-transparent z-10 pointer-events-none" />
           
           <div className="overflow-hidden">
-            {/* Pure CSS animation instead of framer-motion for much better performance */}
             <div
+              ref={scrollRef}
               className="flex gap-6 testimonial-scroll"
               style={{ willChange: "transform" }}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
             >
               {extendedTestimonials.map((testimonial, i) => (
                 <TestimonialCard key={i} testimonial={testimonial} />
