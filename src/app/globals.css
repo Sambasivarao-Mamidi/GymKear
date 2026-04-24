@@ -73,7 +73,7 @@ p {
   100% { transform: translateX(-50%); }
 }
 .testimonial-scroll {
-  animation: testimonial-scroll 12s linear infinite;
+  animation: testimonial-scroll 5s linear infinite;
 }
 .testimonial-scroll:hover,
 .testimonial-scroll:active,
@@ -434,7 +434,7 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Testimonials: slightly slower on mobile for smoother feel */
   .testimonial-scroll {
-    animation-duration: 15s;
+    animation-duration: 8s;
   }
 }
 
