@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
@@ -84,20 +84,72 @@ function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] 
 }
 
 export default function Testimonials() {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({ x: 0, scrollLeft: 0 });
+  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const extendedTestimonials = [
     ...testimonials,
     ...testimonials,
   ];
 
-  const handleTouchStart = () => {
-    scrollRef.current?.classList.add("paused");
+  // Pause auto-scroll and resume after 3s of inactivity
+  const pauseAutoScroll = useCallback(() => {
+    scrollContainerRef.current?.classList.add("paused");
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      scrollContainerRef.current?.classList.remove("paused");
+    }, 3000);
+  }, []);
+
+  // --- Touch drag support (mobile swipe) ---
+  const handleTouchStart = (e: React.TouchEvent) => {
+    pauseAutoScroll();
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: e.touches[0].clientX,
+      scrollLeft: scrollContainerRef.current?.parentElement?.scrollLeft || 0,
+    };
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || !scrollContainerRef.current?.parentElement) return;
+    const dx = e.touches[0].clientX - dragStartRef.current.x;
+    scrollContainerRef.current.parentElement.scrollLeft = dragStartRef.current.scrollLeft - dx;
   };
 
   const handleTouchEnd = () => {
-    scrollRef.current?.classList.remove("paused");
+    setIsDragging(false);
   };
+
+  // --- Mouse drag support (desktop click-and-drag) ---
+  const handleMouseDown = (e: React.MouseEvent) => {
+    pauseAutoScroll();
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: e.clientX,
+      scrollLeft: scrollContainerRef.current?.parentElement?.scrollLeft || 0,
+    };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollContainerRef.current?.parentElement) return;
+    e.preventDefault();
+    const dx = e.clientX - dragStartRef.current.x;
+    scrollContainerRef.current.parentElement.scrollLeft = dragStartRef.current.scrollLeft - dx;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    };
+  }, []);
 
   return (
     <section id="testimonials" className="py-20 lg:py-28 relative overflow-hidden" aria-label="Testimonials">
@@ -129,13 +181,18 @@ export default function Testimonials() {
           <div className="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-[#01100c] to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-[#01100c] to-transparent z-10 pointer-events-none" />
           
-          <div className="overflow-hidden">
+          <div className="overflow-hidden testimonial-wrapper">
             <div
-              ref={scrollRef}
-              className="flex gap-6 testimonial-scroll"
-              style={{ willChange: "transform" }}
+              ref={scrollContainerRef}
+              className={`flex gap-6 testimonial-scroll ${isDragging ? "dragging" : ""}`}
+              style={{ willChange: "transform", cursor: isDragging ? "grabbing" : "grab" }}
               onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
             >
               {extendedTestimonials.map((testimonial, i) => (
                 <TestimonialCard key={i} testimonial={testimonial} />

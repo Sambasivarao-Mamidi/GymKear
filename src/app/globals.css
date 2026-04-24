@@ -77,8 +77,21 @@ p {
 }
 .testimonial-scroll:hover,
 .testimonial-scroll:active,
-.testimonial-scroll.paused {
+.testimonial-scroll.paused,
+.testimonial-scroll.dragging {
   animation-play-state: paused;
+}
+.testimonial-scroll.dragging * {
+  pointer-events: none;
+  user-select: none;
+}
+.testimonial-wrapper {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.testimonial-wrapper::-webkit-scrollbar {
+  display: none;
 }
 
 /* Improve heading readability */
