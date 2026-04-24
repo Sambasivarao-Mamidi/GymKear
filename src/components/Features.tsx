@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Dumbbell, Utensils, Heart, ClipboardCheck, ArrowRight } from "lucide-react";
+import { useMobileDetection } from "./MagicBento";
 
 const services = [
   {
@@ -27,6 +28,8 @@ const services = [
 ];
 
 export default function Features() {
+  const isMobile = useMobileDetection();
+  
   return (
     <section id="services" className="d2c_gradient_tl py-20 lg:py-28 relative">
       <div className="absolute top-20 right-0 w-72 h-72 bg-[#2ccb99]/5 rounded-full blur-3xl" />
@@ -63,10 +66,10 @@ export default function Features() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ scale: 1.02 }}
-                className="group rounded-xl border border-[#2e3937]/50 p-5 md:p-6 bg-gradient-to-r from-[#1d2b28]/80 to-[#0d1812]/80 hover:border-[#2ccb99]/50 hover:shadow-lg hover:shadow-[#2ccb99]/10 transition-all cursor-pointer"
+                className={`group rounded-xl border border-[#2e3937]/50 p-5 md:p-6 bg-gradient-to-r from-[#1d2b28]/80 to-[#0d1812]/80 hover:border-[#2ccb99]/50 hover:shadow-lg hover:shadow-[#2ccb99]/10 transition-all cursor-pointer ${isMobile ? 'auto-border-pulse' : ''}`}
               >
                 <div className="flex gap-5 items-start">
-                  <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-xl bg-[#2ccb99]/10 border border-[#2ccb99]/30 flex items-center justify-center text-[#2ccb99] group-hover:bg-[#2ccb99] group-hover:text-[#01100c] transition-all">
+                  <div className={`flex-shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-xl bg-[#2ccb99]/10 border border-[#2ccb99]/30 flex items-center justify-center text-[#2ccb99] group-hover:bg-[#2ccb99] group-hover:text-[#01100c] transition-all ${isMobile ? 'auto-icon-fill' : ''}`}>
                     <item.icon className="w-7 h-7 md:w-8 md:h-8" strokeWidth={2} />
                   </div>
                   <div className="flex-1">
@@ -77,7 +80,7 @@ export default function Features() {
                       {item.description}
                     </p>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-[#2ccb99] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-2" />
+                  <ArrowRight className={`w-5 h-5 text-[#2ccb99] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-2 ${isMobile ? 'auto-content' : ''}`} />
                 </div>
               </motion.div>
             ))}

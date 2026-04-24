@@ -190,18 +190,18 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Marquee strips (website_clone: two strips, one rotate 7deg one -7deg) */
 @keyframes marquee-left {
-  0% { transform: translate(0); }
-  100% { transform: translate(-30%); }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 @keyframes marquee-right {
-  0% { transform: translate(-30%); }
-  100% { transform: translate(0); }
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
 }
 .animate-marquee-left {
-  animation: marquee-left 30s linear infinite;
+  animation: marquee-left 20s linear infinite;
 }
 .animate-marquee-right {
-  animation: marquee-right 30s linear infinite;
+  animation: marquee-right 20s linear infinite;
 }
 
 /* Card background (website_clone d2c_card_bg) */
@@ -375,4 +375,67 @@ h1, h2, h3, h4, h5, h6 {
 .glare-auto > * {
   position: relative;
   z-index: 1;
+}
+
+/* Mobile Auto-Animations (running without hover) */
+@media (max-width: 767px) {
+  /* Auto-scale pulse for Gallery/Trainers cards */
+  .auto-scale-pulse {
+    animation: auto-scale-pulse 3s ease-in-out infinite;
+  }
+  
+  /* Auto-border pulse for Features/Mission cards */
+  .auto-border-pulse {
+    animation: auto-border-pulse 2s ease-in-out infinite;
+  }
+  
+  /* Auto-overlay visible */
+  .auto-overlay {
+    opacity: 0.6 !important;
+  }
+  
+  /* Auto-content visible */
+  .auto-content {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+  
+  /* Auto-icon filled */
+  .auto-icon-fill {
+    background: rgba(44, 203, 153, 0.3) !important;
+    color: #2ccb99 !important;
+  }
+  
+  /* Auto-indicator visible */
+  .auto-indicator {
+    transform: scaleX(1) !important;
+  }
+  
+  /* Auto-scale for MagicBentoCard */
+  .auto-tilt {
+    animation: auto-tilt 4s ease-in-out infinite;
+  }
+  
+  /* Auto-particle spawn */
+  .auto-particles {
+    opacity: 1 !important;
+  }
+}
+
+@keyframes auto-scale-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+@keyframes auto-border-pulse {
+  0%, 100% { border-color: rgba(46, 57, 55, 0.5); }
+  50% { border-color: rgba(44, 203, 153, 0.5); }
+}
+
+@keyframes auto-tilt {
+  0%, 100% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg); }
+  25% { transform: perspective(1000px) rotateX(2deg) rotateY(-2deg); }
+  50% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg); }
+  75% { transform: perspective(1000px) rotateX(-2deg) rotateY(2deg); }
+  100% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg); }
 }

@@ -13,7 +13,6 @@ import Trainers from "@/components/Trainers";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
-import Location from "@/components/Location";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -44,7 +43,6 @@ export default function Home() {
       <Testimonials />
       <FAQ />
       <Contact />
-      <Location />
       <Footer />
     </main>
   );

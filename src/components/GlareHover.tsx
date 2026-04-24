@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { useMobileDetection } from "./MagicBento";
 
 interface GlareHoverProps {
   width?: string;
@@ -27,6 +28,8 @@ const GlareHover = ({
   className = '',
   style = {}
 }: GlareHoverProps) => {
+  const isMobile = useMobileDetection();
+  
   const vars = {
     '--gh-width': width,
     '--gh-height': height,
@@ -37,9 +40,12 @@ const GlareHover = ({
     '--gh-opacity': glareOpacity
   };
 
+  // Mobile: use auto-sweep animation, Desktop: use hover effect
+  const autoClass = isMobile ? 'glare-auto' : '';
+
   return (
     <div
-      className={`glare-hover ${className}`}
+      className={`glare-hover ${autoClass} ${className}`}
       style={{ ...vars, ...style, width, height }}
     >
       {children}

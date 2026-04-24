@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useMobileDetection } from "./MagicBento";
+import CardNav from "./CardNav";
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -18,6 +20,7 @@ const navItems = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const isMobile = useMobileDetection();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,6 +44,11 @@ export default function Navbar() {
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Render CardNav on mobile, current navbar on desktop
+  if (isMobile) {
+    return <CardNav />;
+  }
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();

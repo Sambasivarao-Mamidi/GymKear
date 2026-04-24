@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Instagram, Facebook, Linkedin } from "lucide-react";
+import { useMobileDetection } from "./MagicBento";
 
 const trainers = [
   { 
@@ -32,6 +33,8 @@ const trainers = [
 ];
 
 export default function Trainers() {
+  const isMobile = useMobileDetection();
+  
   return (
     <section id="trainers" className="d2c_gradient_br py-20 lg:py-28 relative">
       <div className="absolute top-20 left-0 w-64 h-64 bg-[#2ccb99]/5 rounded-full blur-3xl" />
@@ -73,7 +76,7 @@ export default function Trainers() {
                   src={trainer.image}
                   alt={trainer.name}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className={`object-cover transition-transform duration-500 group-hover:scale-105 ${isMobile ? 'auto-scale-pulse' : ''}`}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#01100c] via-transparent to-transparent" />
@@ -95,7 +98,7 @@ export default function Trainers() {
                 </div>
 
                 {/* Social Icons - Show on Hover */}
-                <div className="absolute inset-0 bg-[#01100c]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                <div className={`absolute inset-0 bg-[#01100c]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 ${isMobile ? 'auto-overlay' : ''}`}>
                   <motion.a
                     href={trainer.socials.instagram}
                     initial={{ scale: 0 }}

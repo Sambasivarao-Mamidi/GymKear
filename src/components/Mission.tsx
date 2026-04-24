@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Users, Dumbbell, Heart, ArrowRight, Award } from "lucide-react";
 import Image from "next/image";
+import { useMobileDetection } from "./MagicBento";
 
 const values = [
   {
@@ -34,13 +35,15 @@ const stats = [
 ];
 
 export default function Mission() {
+  const isMobile = useMobileDetection();
+  
   return (
     <section id="about" className="d2c_gradient_lb pt-14 md:pt-24 pb-20 lg:pb-28 relative overflow-hidden">
       <div className="absolute top-20 right-0 w-72 h-72 bg-[#2ccb99]/5 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-0 w-96 h-96 bg-[#2ccb99]/5 rounded-full blur-3xl" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -63,6 +66,35 @@ export default function Mission() {
               cutting-edge equipment, and a community that pushes you to be better every day.
             </p>
             
+            <div className="mt-8">
+              <h3 className="text-[#2ccb99] text-lg font-semibold mb-4" style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}>
+                WHY CHOOSE US
+              </h3>
+              <div className="grid grid-cols-3 gap-4">
+                {stats.map((stat, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    className="text-center p-4 rounded-xl bg-gradient-to-b from-[#1d2b28]/80 to-[#0d1812]/80 border border-[#2e3937]/30"
+                  >
+                    <div className="flex items-baseline justify-center">
+                      <span 
+                        className="text-3xl md:text-4xl font-bold text-[#2ccb99]" 
+                        style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}
+                      >
+                        {stat.value}
+                      </span>
+                      <span className="text-[#2ccb99] text-xl">{stat.suffix}</span>
+                    </div>
+                    <p className="text-white/70 text-xs mt-1 uppercase tracking-wide">{stat.label}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
             <div className="mt-8 grid grid-cols-2 gap-4">
               {values.map((item, i) => (
                 <motion.div
@@ -71,9 +103,10 @@ export default function Mission() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="group p-4 rounded-xl bg-[#1d2b28]/50 border border-[#2e3937]/50 hover:border-[#2ccb99]/50 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  className={`group p-4 rounded-xl bg-[#1d2b28]/50 border border-[#2e3937]/50 hover:border-[#2ccb99]/50 transition-colors ${isMobile ? 'auto-border-pulse' : ''}`}
                 >
-                  <item.icon className="w-6 h-6 text-[#2ccb99] mb-2 group-hover:scale-110 transition-transform" />
+                  <item.icon className={`w-6 h-6 text-[#2ccb99] mb-2 group-hover:scale-110 transition-transform ${isMobile ? 'auto-icon-fill' : ''}`} />
                   <h4 className="text-white font-semibold text-sm">{item.title}</h4>
                   <p className="text-white/60 text-xs mt-1">{item.desc}</p>
                 </motion.div>
@@ -106,43 +139,17 @@ export default function Mission() {
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#01100c]/90 via-transparent to-transparent" />
-              
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="p-4 rounded-xl bg-[#01100c]/80 backdrop-blur-md border border-[#2e3937]/50">
-                  <p className="text-white/80 text-sm italic">&ldquo;Transform your body, elevate your life — one rep at a time.&rdquo;</p>
-                  <p className="text-[#2ccb99] text-xs mt-2">— GymKear Founder</p>
-                </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#01100c]/90 via-transparent to-transparent hidden md:block" />
+            </div>
+            
+            <div className="mt-4 md:mt-0 md:absolute md:bottom-6 md:left-6 md:right-6">
+              <div className="p-4 rounded-xl bg-[#01100c]/80 md:backdrop-blur-md border border-[#2e3937]/50">
+                <p className="text-white/80 text-sm italic">&ldquo;Transform your body, elevate your life — one rep at a time.&rdquo;</p>
+                <p className="text-[#2ccb99] text-xs mt-2">— GymKear Founder</p>
               </div>
             </div>
           </motion.div>
         </div>
-
-        <motion.div
-          className="grid grid-cols-3 gap-4 md:gap-6 mt-16"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          {stats.map((stat, i) => (
-            <motion.div
-              key={i}
-              className="text-center p-6 rounded-2xl bg-gradient-to-b from-[#1d2b28]/80 to-[#0d1812]/80 border border-[#2e3937]/30"
-            >
-              <div className="flex items-baseline justify-center">
-                <span 
-                  className="text-4xl md:text-5xl font-bold text-[#2ccb99]" 
-                  style={{ fontFamily: "var(--font-bebas-neue), sans-serif" }}
-                >
-                  {stat.value}
-                </span>
-                <span className="text-[#2ccb99] text-2xl">{stat.suffix}</span>
-              </div>
-              <p className="text-white/70 text-sm mt-2 uppercase tracking-wide">{stat.label}</p>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
     </section>
   );

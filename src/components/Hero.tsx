@@ -2,54 +2,16 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Star } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
 
-const marqueeRow = [
-  { type: "star" as const },
-  { type: "text" as const, text: "Welcome to GymKear", primary: true },
-  { type: "star" as const },
-  { type: "text" as const, text: "where your fitness transformation begins", primary: false },
+const marqueeItems = [
+  "Welcome to GymKear",
+  "where your fitness transformation begins",
+  "Premium Equipment",
+  "Expert Trainers",
+  "State-of-the-Art Facilities",
+  "Join the Community",
 ];
-
-function MarqueeStrip({ direction }: { direction: "left" | "right" }) {
-  const animationClass = direction === "left" ? "animate-marquee-left" : "animate-marquee-right";
-  return (
-    <div className={`flex w-max ${animationClass} whitespace-nowrap`}>
-      <div className="flex shrink-0 min-w-full items-center gap-6">
-        {[...marqueeRow, ...marqueeRow, ...marqueeRow].map((item, i) =>
-          item.type === "star" ? (
-            <Star key={i} className="w-5 h-5 text-[#2ccb99] flex-shrink-0" />
-          ) : (
-            <span
-              key={i}
-              className={`marquee-text text-sm md:text-base lg:text-xl ${item.primary ? "text-[#2ccb99]" : "text-white"
-                }`}
-              style={{ fontFamily: "var(--font-space-grotesk), sans-serif", textTransform: "capitalize" }}
-            >
-              {item.text}
-            </span>
-          )
-        )}
-      </div>
-      <div className="flex shrink-0 min-w-full items-center gap-6">
-        {[...marqueeRow, ...marqueeRow, ...marqueeRow].map((item, i) =>
-          item.type === "star" ? (
-            <Star key={`dup-${i}`} className="w-5 h-5 text-[#2ccb99] flex-shrink-0" />
-          ) : (
-            <span
-              key={`dup-${i}`}
-              className={`marquee-text text-sm md:text-base lg:text-xl ${item.primary ? "text-[#2ccb99]" : "text-white"
-                }`}
-              style={{ fontFamily: "var(--font-space-grotesk), sans-serif", textTransform: "capitalize" }}
-            >
-              {item.text}
-            </span>
-          )
-        )}
-      </div>
-    </div>
-  );
-}
 
 /* ---------- Floating particles data ---------- */
 const particles = [
@@ -71,7 +33,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="overflow-hidden relative pt-8 pb-24"
+      className="flex flex-col overflow-hidden relative pt-24 md:pt-8 pb-0"
       style={{
         background:
           "radial-gradient(ellipse at 80% 20%, #0d3b2e 0%, transparent 50%), " +
@@ -97,7 +59,6 @@ export default function Hero() {
               </feMerge>
             </filter>
           </defs>
-          {/* Wave 1 – large sweep */}
           <path
             className="hero-wave hero-wave-1"
             d="M-100,320 C200,220 400,420 720,280 S1100,380 1540,260"
@@ -106,7 +67,6 @@ export default function Hero() {
             strokeWidth="2.5"
             filter="url(#glow)"
           />
-          {/* Wave 2 – mid */}
           <path
             className="hero-wave hero-wave-2"
             d="M-50,400 C250,300 500,500 800,350 S1150,450 1500,330"
@@ -115,7 +75,6 @@ export default function Hero() {
             strokeWidth="2"
             filter="url(#glow)"
           />
-          {/* Wave 3 – subtle top */}
           <path
             className="hero-wave hero-wave-3"
             d="M0,180 C300,100 600,280 900,160 S1200,250 1500,140"
@@ -145,9 +104,9 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* ── Main content (above effects) ── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-center">
+      {/* ── Main content ── */}
+      <div className="order-2 lg:order-1 relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-center min-h-[70vh]">
           <div className="text-center lg:text-left">
             <h2
               className="d2c_title"
@@ -196,6 +155,27 @@ export default function Hero() {
                 unoptimized
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Marquee Notification Strip ── */}
+      <div className="order-1 lg:order-2 relative z-20 w-full mb-8 lg:mb-0 mt-0 lg:mt-20 overflow-hidden">
+        <div className="bg-gradient-to-r from-[#2ccb99]/20 via-[#2ccb99]/10 to-[#2ccb99]/20 py-4 border-y border-[#2ccb99]/30">
+          <div className="animate-marquee-left flex whitespace-nowrap">
+            <div className="flex items-center gap-8 px-4">
+              {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
+                <span key={i} className="flex items-center gap-4">
+                  <span
+                    className="text-white/90 text-base md:text-lg font-medium"
+                    style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
+                  >
+                    {item}
+                  </span>
+                  <Star className="w-4 h-4 text-[#2ccb99] fill-[#2ccb99] flex-shrink-0" />
+                </span>
+              ))}
             </div>
           </div>
         </div>
